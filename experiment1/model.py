@@ -43,3 +43,17 @@ class Modular1(LightningModule):
         self.log("loss/train", loss, prog_bar=True, on_step=False, on_epoch=True)
         return loss
         
+    def validation_step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
+        # Unpacking
+        samples = batch["samples"]
+        targets = batch["targets"]
+
+        # Forward
+        targets_pred = self(samples)
+
+        # Loss
+        loss = self.criteria(targets, targets_pred)
+
+        # Logging
+        self.log("loss/valid", loss, prog_bar=True, on_step=False, on_epoch=True)
+        return loss
