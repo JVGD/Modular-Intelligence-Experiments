@@ -3,7 +3,7 @@ from pytorch_lightning import LightningModule
 from torch import nn
 from torch.nn.parameter import Parameter
 
-from experiment1.modules import Adder, Substracter
+from modules import Adder, Substracter
 
 
 class Model1(LightningModule):
