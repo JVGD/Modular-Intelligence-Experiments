@@ -6,7 +6,7 @@ from torch.nn.parameter import Parameter
 from experiment1.modules import Adder, Substracter
 
 
-class Modular1(LightningModule):
+class Model1(LightningModule):
     def __init__(self):
         """Modular AI approach 1"""
         super().__init__()
@@ -28,7 +28,7 @@ class Modular1(LightningModule):
         y = self.weights_adder * y0 + self.weights_substracter * y1
         return y
 
-    def training_step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
+    def step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
         # Unpacking
         samples = batch["samples"]
         targets = batch["targets"]
@@ -38,22 +38,15 @@ class Modular1(LightningModule):
 
         # Loss
         loss = self.criteria(targets, targets_pred)
+        return loss
 
-        # Logging
-        self.log("loss/train", loss, prog_bar=True, on_step=False, on_epoch=True)
+    def training_step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
+        # Loss
+        loss = self.step(batch, batch_idx, *args, *kwargs)
+        self.log("loss/train", loss)
         return loss
         
-    def validation_step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
-        # Unpacking
-        samples = batch["samples"]
-        targets = batch["targets"]
-
-        # Forward
-        targets_pred = self(samples)
-
+    def validation_step(self, batch, batch_idx, *args, **kwargs) -> None:
         # Loss
-        loss = self.criteria(targets, targets_pred)
-
-        # Logging
-        self.log("loss/valid", loss, prog_bar=True, on_step=False, on_epoch=True)
-        return loss
+        loss = self.step(batch, batch_idx, *args, *kwargs)
+        self.log("loss/valid", loss)
