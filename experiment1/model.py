@@ -1,13 +1,14 @@
 import torch as T
 from pytorch_lightning import LightningModule
 from torch import nn
+from torch import optim
 from torch.nn.parameter import Parameter
 
 from modules import Adder, Substracter
 
 
 class Model1(LightningModule):
-    def __init__(self):
+    def __init__(self, lr, optim_conf: dict={}):
         """Modular AI approach 1"""
         super().__init__()
 
@@ -21,6 +22,10 @@ class Model1(LightningModule):
 
         # Loss
         self.criteria = nn.L1Loss()
+
+        # Optimizer conf
+        self.lr = lr
+        self.optim_conf = optim_conf
 
     def forward(self, x):
         y0 = self.adder(x)
@@ -50,3 +55,6 @@ class Model1(LightningModule):
         # Loss
         loss = self.step(batch, batch_idx, *args, *kwargs)
         self.log("loss/valid", loss)
+
+    def configure_optimizers(self):
+        return optim.SGD(self.parameters(), lr=self.lr, **self.optim_conf)
