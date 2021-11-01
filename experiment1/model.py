@@ -30,7 +30,8 @@ class Model1(LightningModule):
     def forward(self, x):
         y0 = self.adder(x)
         y1 = self.substracter(x)
-        y = self.weights_adder * y0 + self.weights_substracter * y1
+        y = (T.sigmoid(self.weights_adder) * y0 + 
+             T.sigmoid(self.weights_substracter) * y1)
         return y
 
     def step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
@@ -59,5 +60,7 @@ class Model1(LightningModule):
         return optim.SGD(self.parameters(), lr=self.lr, **self.optim_conf)
 
     def on_epoch_end(self) -> None:
-        self.log("weights/weights_adder", self.weights_adder)
-        self.log("weights/weights_substractor", self.weights_substracter)
+        self.log("weights/wa", self.weights_adder)
+        self.log("weights/ws", self.weights_substracter)
+        self.log("weights/sigma(wa)", T.sigmoid(self.weights_adder))
+        self.log("weights/sigma(ws)", T.sigmoid(self.weights_substracter))
