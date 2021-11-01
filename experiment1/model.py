@@ -57,3 +57,7 @@ class Model1(LightningModule):
 
     def configure_optimizers(self):
         return optim.SGD(self.parameters(), lr=self.lr, **self.optim_conf)
+
+    def on_epoch_end(self) -> None:
+        self.log("weights/weights_adder", self.weights_adder)
+        self.log("weights/weights_substractor", self.weights_substracter)
