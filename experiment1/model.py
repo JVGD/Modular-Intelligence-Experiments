@@ -35,8 +35,7 @@ class Model1(LightningModule):
 
     def step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
         # Unpacking
-        samples = batch["sample"]
-        targets = batch["target"]
+        samples, targets = batch
 
         # Forward
         targets_pred = self(samples)
