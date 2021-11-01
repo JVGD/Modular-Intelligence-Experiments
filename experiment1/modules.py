@@ -8,7 +8,7 @@ class Adder(object):
 
     def __call__(self, X: T.Tensor) -> T.Tensor:
         """Calling the adding operation without gradient"""
-        return X[0] + X[1]
+        return X[:, 0] + X[:, 1]
 
 
 class Substracter(object):
@@ -18,7 +18,7 @@ class Substracter(object):
 
     def __call__(self, X: T.Tensor) -> T.Tensor:
         """Calling the adding operation without gradient"""
-        return X[0] - X[1]
+        return X[:, 0] - X[:, 1]
 
 
 if __name__ == "__main__":

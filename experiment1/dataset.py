@@ -7,7 +7,7 @@ class NumberAdd(Dataset):
     def __init__(self, total_samples: int) -> None:
         """Generate dataset with pairs of numbers and their sum"""
         self.N = total_samples
-        self.samples = T.randint(low=-1000, high=1000, size=(self.N, 2))
+        self.samples = T.randint(low=-1000, high=1000, size=(self.N, 2), dtype=T.float32)
         self.targets = T.sum(self.samples, dim=-1)
 
     def __getitem__(self, index: int) -> tuple:
