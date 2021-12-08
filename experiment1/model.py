@@ -4,7 +4,7 @@ from torch import nn
 from torch import optim
 from torch.nn.parameter import Parameter
 
-from modules import Adder, Substracter
+from intrinsic import Adder, Substracter
 
 
 class Model1(LightningModule):
