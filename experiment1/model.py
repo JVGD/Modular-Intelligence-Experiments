@@ -8,8 +8,13 @@ from modules import Adder, Substracter
 
 
 class Model1(LightningModule):
-    def __init__(self, lr, optim_conf: dict={}):
-        """Modular AI approach 1"""
+    def __init__(self, lr: float, optim_conf: dict) -> None:
+        """Modular AI approach 1
+
+        Args:
+            lr (float): Learning rate
+            optim_conf (dict): Dict with optimizer conf 
+        """
         super().__init__()
 
         # Usable modules
@@ -27,7 +32,8 @@ class Model1(LightningModule):
         self.lr = lr
         self.optim_conf = optim_conf
 
-    def forward(self, x):
+    def forward(self, x: T.Tensor) -> T.Tensor:
+        """Forward pass"""
         y0 = self.adder(x)
         y1 = self.substracter(x)
         y = (T.sigmoid(self.weights_adder) * y0 + 
@@ -35,6 +41,7 @@ class Model1(LightningModule):
         return y
 
     def step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
+        """Common optimization step: forward + backward passes"""
         # Unpacking
         samples, targets = batch
 
@@ -46,20 +53,24 @@ class Model1(LightningModule):
         return loss
 
     def training_step(self, batch, batch_idx, *args, **kwargs) -> T.Tensor:
+        """Perform a step over a batch and log the training loss"""
         # Loss
         loss = self.step(batch, batch_idx, *args, *kwargs)
         self.log("loss/train", loss)
         return loss
         
     def validation_step(self, batch, batch_idx, *args, **kwargs) -> None:
+        """Perform a validation step over a batch and log the validation loss"""
         # Loss
         loss = self.step(batch, batch_idx, *args, *kwargs)
         self.log("loss/valid", loss)
 
-    def configure_optimizers(self):
+    def configure_optimizers(self) -> T.optim.Optimizer:
+        """Optimizer configuration"""
         return optim.SGD(self.parameters(), lr=self.lr, **self.optim_conf)
 
     def on_epoch_end(self) -> None:
+        """Logging to tensorboard"""
         self.log("weights/wa", self.weights_adder)
         self.log("weights/ws", self.weights_substracter)
         self.log("weights/sigma(wa)", T.sigmoid(self.weights_adder))

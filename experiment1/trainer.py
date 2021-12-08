@@ -14,6 +14,6 @@ dl_tests = DataLoader(NumberAdd(500), batch_size=8, shuffle=True, num_workers=0)
 model = Model1(lr=1e-4, optim_conf={"momentum": 0.9})
 
 # Trainer
-trainer = Trainer(max_epochs=500, callbacks=[ModelCheckpoint(monitor="loss/valid")])
+trainer = Trainer(max_epochs=100, callbacks=[ModelCheckpoint(monitor="loss/valid")])
 trainer.fit(model=model, train_dataloaders=dl_train, val_dataloaders=dl_valid)
 
