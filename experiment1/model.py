@@ -8,6 +8,15 @@ from modules import Adder, Substracter
 
 
 class Model1(LightningModule):
+    """First iteration model 1
+
+    This model is given with two intrinsic knowlegde modules: the Adder 
+    and the Substracter. The model is expected to learn when to use
+    the Adder or when to use the Substracter. However the adder and the
+    substracter are already implemented (they are not learnable). This
+    experiment tries to teach this model to use innate knowledge rather
+    than learning it from the ground up.
+    """
     def __init__(self, lr: float, optim_conf: dict) -> None:
         """Modular AI approach 1
 
